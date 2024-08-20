@@ -13,6 +13,7 @@ html {
 
 :root {
     --textColor: #fff;
+    --textColor2: #000000;
     --backgroundColor: #000;
     --backgroundColor2: #141414;
     --accentColor: #000000;
@@ -29,12 +30,15 @@ html {
     box-sizing: border-box;
 }
 
+
+
+
 .hero {
     height: 40vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('/images/header.jpg'); /* Replace with your actual background image */
+  
     background-size: cover;
     background-position: center;
     position: relative;
@@ -47,13 +51,12 @@ html {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
 }
 
 .hero-content {
     position: relative;
     text-align: center;
-    color: #fff;
+
     z-index: 1;
 }
 
