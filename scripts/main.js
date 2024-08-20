@@ -22,35 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    gsap.from('.hero-title', {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        ease: 'power3.out'
-    });
-
-    gsap.from('.hero-subtitle', {
-        opacity: 0,
-        y: 30,
-        duration: 1,
-        delay: 0.5,
-        ease: 'power3.out'
-    });
-
-    // Parallax effect for hero background
-    gsap.to('.hero', {
-        backgroundPosition: '50% 100%',
-        ease: 'none',
-        scrollTrigger: {
-            trigger: '.hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true
-        }
-    });
-
-   
   
 
     // Projects dropdown functionality
@@ -97,17 +68,67 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-  // Initialize GSAP
-  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-  // Custom cursor
-  const cursor = document.querySelector('.cursor');
-  const cursorFollower = document.querySelector('.cursor-follower');
-
-  document.addEventListener('mousemove', (e) => {
-      gsap.to(cursor, {duration: 0.1, x: e.clientX, y: e.clientY});
-      gsap.to(cursorFollower, {duration: 0.3, x: e.clientX, y: e.clientY});
-  });
+    const svgCanvas = document.getElementById('svgCanvas');
+    const ball = document.getElementById('ball');
+    const textPath = document.getElementById('textPath');
+    const invisiblePath = document.getElementById('invisiblePath');
+    const revealRect = document.getElementById('revealRect');
+    
+    const animationDuration = 8000; // 8 seconds for entire animation
+    const pauseDuration = 10000; // 10 seconds pause before repeat
+    
+    function animate() {
+        return new Promise(resolve => {
+            const start = performance.now();
+            const invisiblePathLength = invisiblePath.getTotalLength();
+            const textPathLength = textPath.getTotalLength();
+            const totalLength = invisiblePathLength + textPathLength;
+            const textStart = 400; // X-coordinate where text starts
+    
+            function step(timestamp) {
+                const progress = timestamp - start;
+                const percent = Math.min(progress / animationDuration, 1);
+                const distance = percent * totalLength;
+    
+                if (distance <= invisiblePathLength) {
+                    // Ball moving along invisible path
+                    const point = invisiblePath.getPointAtLength(distance);
+                    ball.setAttribute('cx', point.x);
+                    ball.setAttribute('cy', point.y);
+                    revealRect.setAttribute('width', '0');
+                } else {
+                    // Ball drawing text
+                    const textDistance = distance - invisiblePathLength;
+                    const point = textPath.getPointAtLength(textDistance);
+                    ball.setAttribute('cx', point.x);
+                    ball.setAttribute('cy', point.y);
+                    revealRect.setAttribute('width', point.x - textStart);
+                }
+    
+                if (percent < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    resolve();
+                }
+            }
+    
+            requestAnimationFrame(step);
+        });
+    }
+    
+    async function runAnimation() {
+        while (true) {
+            ball.setAttribute('cx', -10);
+            ball.setAttribute('cy', 200);
+            revealRect.setAttribute('width', '0');
+            
+            await animate();
+            await new Promise(resolve => setTimeout(resolve, pauseDuration));
+        }
+    }
+    
+    runAnimation();
+    
 
 
     // Handle window resize
