@@ -9,6 +9,39 @@
     <link rel="stylesheet" href="styles/animations.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+
+<style>
+    .animation-container {
+    width: 100%;
+    height:40vh; /* Match the hero section's height */
+    position: relative;
+    overflow: hidden;
+    background-color: var(--secondrycolor); /* Use the site's background color */
+}
+
+#svgCanvas {
+    width: 100%;
+    height: 100%;
+}
+
+#textPath {
+    fill: none;
+    stroke: var(--textColor2); /* Ensure the text color matches your site's theme */
+    stroke-width: 2;
+}
+
+#ball {
+    r: 4px;
+    fill: var(--textColor2); /* Ball color to match the text color */
+}
+
+#invisiblePath {
+    stroke: none;
+    fill: none;
+}
+</style>
+
 </head>
 <body>
     <header>
@@ -37,8 +70,19 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">NyX</h1>
-                <p class="hero-subtitle">Digital Sorcerer & Code Alchemist</p>
+                <div class="animation-container">
+                    <svg id="svgCanvas" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <mask id="textMask">
+                                <rect x="0" y="0" width="1000" height="400" fill="white"/>
+                                <rect id="revealRect" x="0" y="0" width="0" height="400" fill="black"/>
+                            </mask>
+                        </defs>
+                        <path id="invisiblePath" d="M-10,200 Q200,150 400,200" />
+                        <path id="textPath" d="M400,200 L450,150 L500,200 M550,150 V250 M600,150 L650,250 L700,150 M750,200 H850 M900,150 C950,150 950,250 900,250" mask="url(#textMask)" />
+                        <circle id="ball" cx="-10" cy="200" r="4" />
+                    </svg>
+                </div>
             </div>
         </section>
 
@@ -160,8 +204,7 @@
             <p>&copy; 2024 Alex Nightshade. All rights reserved.</p>
         </div>
     </footer>
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
+   
     <script src="scripts/main.js"></script>
     <script src="scripts/about.js"></script>
 </body>
