@@ -47,7 +47,7 @@
       }
       .dropdown {
         position: absolute;
-        top: calc(100% + 10px);
+        top: calc(100% + 20px); /* Changed from 10px to 12px */
         left: 50%;
         transform: translateX(-50%);
         background: #000;
@@ -62,12 +62,12 @@
       .dropdown::before {
         content: "";
         position: absolute;
-        top: -10px;
+        top: -12px; /* Changed from -10px to -12px */
         left: 50%;
         transform: translateX(-50%);
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
-        border-bottom: 10px solid #000;
+        border-bottom: 12px solid #000; /* Changed from 10px to 12px */
       }
       .menu-item:hover .dropdown {
         opacity: 1;
