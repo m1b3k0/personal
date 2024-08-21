@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refined Avant-Garde Menu</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        .menu-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .menu {
+            display: flex;
+            gap: 2rem;
+        }
+        .menu-item {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            transition: all 0.3s ease;
+        }
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+        .menu-item:hover::before {
+            width: 100%;
+            left: 0;
+        }
+        .dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            border-radius: 4px;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .menu-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+        }
+        .dropdown a {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            transition: all 0.2s ease;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .menu-item:hover .dropdown a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dropdown a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <nav class="menu">
+            <div class="menu-item">About</div>
+            <div class="menu-item">
+                Projects
+                <div class="dropdown">
+                    <a href="#">All</a>
+                    <a href="#">Programming</a>
+                    <a href="#">Design</a>
+                    <a href="#">Art</a>
+                </div>
+            </div>
+            <div class="menu-item">Contact</div>
+        </nav>
+    </div>
+
+    <svg id="background" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script>
+        const background = document.getElementById('background');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        function createBlob() {
+            const blob = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            const size = Math.random() * 100 + 50;
+            blob.setAttribute('r', size);
+            blob.setAttribute('cx', Math.random() * window.innerWidth);
+            blob.setAttribute('cy', Math.random() * window.innerHeight);
+            blob.setAttribute('fill', `hsl(${Math.random() * 360}, 70%, 60%)`);
+            background.appendChild(blob);
+
+            gsap.to(blob, {
+                duration: Math.random() * 10 + 5,
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                scale: Math.random() * 0.5 + 0.5,
+                opacity: 0,
+                ease: "power1.inOut",
+                onComplete: () => {
+                    background.removeChild(blob);
+                    createBlob();
+                }
+            });
+        }
+
+        for (let i = 0; i < 10; i++) {
+            createBlob();
+        }
+
+        menuItems.forEach(item => {
+            const dropdownLinks = item.querySelectorAll('.dropdown a');
+            
+            item.addEventListener('mouseenter', () => {
+                gsap.to(item, {duration: 0.3, scale: 1.1, color: '#ffcc00'});
+                gsap.to(dropdownLinks, {
+                    duration: 0.3,
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.05,
+                    ease: "power2.out"
+                });
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                gsap.to(item, {duration: 0.3, scale: 1, color: '#ffffff'});
+                gsap.to(dropdownLinks, {
+                    duration: 0.2,
+                    opacity: 0,
+                    y: 10,
+                    stagger: 0.03,
+                    ease: "power2.in"
+                });
+            });
+        });
+    </script>
+</body>
+</html>

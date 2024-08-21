@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Animated Mindmap</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .mindmap {
+            width: 900px;
+            height: 600px;
+        }
+        .node circle {
+            fill: #1a1a1a;
+            stroke: #4ecdc4;
+            stroke-width: 2px;
+        }
+        .node text {
+            font-size: 12px;
+            fill: #ffffff;
+        }
+        .link {
+            fill: none;
+            stroke: #2c3e50;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mindmap"></div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        const width = 900;
+        const height = 600;
+
+        const svg = d3.select('.mindmap')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .append('g')
+            .attr('transform', `translate(${width / 2},${height / 2})`);
+
+        const mindmapData = {
+            name: "Web Development",
+            children: [
+                {
+                    name: "Frontend",
+                    children: [
+                        { name: "HTML" },
+                        { name: "CSS" },
+                        { name: "JavaScript" },
+                        { name: "Frameworks", children: [
+                            { name: "React" },
+                            { name: "Vue" },
+                            { name: "Angular" }
+                        ]}
+                    ]
+                },
+                {
+                    name: "Backend",
+                    children: [
+                        { name: "Node.js" },
+                        { name: "Python" },
+                        { name: "Databases", children: [
+                            { name: "SQL" },
+                            { name: "NoSQL" }
+                        ]}
+                    ]
+                },
+                {
+                    name: "DevOps",
+                    children: [
+                        { name: "Git" },
+                        { name: "Docker" },
+                        { name: "CI/CD" }
+                    ]
+                },
+                {
+                    name: "Design",
+                    children: [
+                        { name: "UI" },
+                        { name: "UX" },
+                        { name: "Responsive" }
+                    ]
+                }
+            ]
+        };
+
+        const treeLayout = d3.tree().size([2 * Math.PI, Math.min(width, height) / 2 - 100]);
+        const root = d3.hierarchy(mindmapData);
+        treeLayout(root);
+
+        const link = svg.selectAll('.link')
+            .data(root.links())
+            .enter().append('path')
+            .attr('class', 'link')
+            .attr('d', d3.linkRadial()
+                .angle(d => d.x)
+                .radius(d => d.y));
+
+        const node = svg.selectAll('.node')
+            .data(root.descendants())
+            .enter().append('g')
+            .attr('class', 'node')
+            .attr('transform', d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+
+        node.append('circle')
+            .attr('r', 4);
+
+        node.append('text')
+            .attr('dy', '0.31em')
+            .attr('x', d => d.x < Math.PI === !d.children ? 6 : -6)
+            .attr('text-anchor', d => d.x < Math.PI === !d.children ? 'start' : 'end')
+            .attr('transform', d => d.x >= Math.PI ? 'rotate(180)' : null)
+            .text(d => d.data.name)
+            .style('font-size', d => d.depth === 0 ? '16px' : '12px')
+            .style('font-weight', d => d.depth === 0 ? 'bold' : 'normal')
+            .style('opacity', 0);
+
+        // Animation
+        const totalLength = link.node().getTotalLength();
+        link
+            .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+            .attr('stroke-dashoffset', totalLength)
+            .transition()
+            .duration(3000)
+            .ease(d3.easeLinear)
+            .attr('stroke-dashoffset', 0)
+            .on('end', () => {
+                node.selectAll('circle')
+                    .transition()
+                    .duration(500)
+                    .attr('r', d => d.depth === 0 ? 8 : 4);
+
+                node.selectAll('text')
+                    .transition()
+                    .duration(500)
+                    .style('opacity', 1);
+            });
+    </script>
+</body>
+</html>

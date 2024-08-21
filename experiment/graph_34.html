@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Bar Chart</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .chart-container {
+            width: 80%;
+            max-width: 800px;
+            margin: auto;
+        }
+        canvas {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="chart-container">
+        <canvas id="skillsChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('skillsChart').getContext('2d');
+
+        const data = {
+            labels: ['C#', 'C++', 'HTML', 'CSS', 'JavaScript'],
+            datasets: [{
+                label: 'Skill Level',
+                data: [18, 14, 22, 20, 16], // Arbitrary dummy data
+                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                borderColor: 'rgba(0, 123, 255, 1)',
+                borderWidth: 1,
+                borderRadius: 5,
+                hoverBackgroundColor: 'rgba(0, 123, 255, 0.7)',
+                hoverBorderColor: 'rgba(0, 123, 255, 1)',
+            }]
+        };
+
+        const options = {
+            responsive: true,
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 25,
+                    ticks: {
+                        stepSize: 5,
+                        callback: function(value) {
+                            if (value <= 5) return 'Beginner';
+                            if (value <= 10) return 'Intermediate';
+                            if (value <= 15) return 'Advanced';
+                            if (value <= 20) return 'Professional';
+                            return 'Expert';
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            const skillLevel = tooltipItem.raw;
+                            let level = '';
+                            if (skillLevel <= 5) level = 'Beginner';
+                            else if (skillLevel <= 10) level = 'Intermediate';
+                            else if (skillLevel <= 15) level = 'Advanced';
+                            else if (skillLevel <= 20) level = 'Professional';
+                            else level = 'Expert';
+                            return ` ${tooltipItem.label}: ${tooltipItem.raw} (${level})`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                duration: 1500, // Duration of the animation in milliseconds
+                easing: 'easeOutQuart'
+            }
+        };
+
+        const skillsChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Dot and Correctly Positioned Growing Circle Click Effect</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+            cursor: none;
+            overflow: hidden;
+        }
+        #pulse {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #1a5f7a;
+            position: fixed;
+            pointer-events: none;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        .grow-circle {
+            position: absolute;
+            background-color: #1a5f7a;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="pulse"></div>
+
+    <script>
+        const pulse = document.getElementById('pulse');
+        let pulsePosition = { x: 0, y: 0 };
+
+        document.addEventListener('mousemove', (e) => {
+            pulsePosition.x = e.clientX - 2.5;
+            pulsePosition.y = e.clientY - 12.5;
+            pulse.style.left = `${pulsePosition.x}px`;
+            pulse.style.top = `${pulsePosition.y}px`;
+        });
+
+        document.addEventListener('click', (e) => {
+            const circle = document.createElement('div');
+            circle.classList.add('grow-circle');
+            circle.style.left = `${pulsePosition.x + 2.5}px`;
+            circle.style.top = `${pulsePosition.y + 2.5}px`;
+            document.body.appendChild(circle);
+
+            let radius = 0;
+            const maxRadius = 10;
+            const duration = 500; // milliseconds
+            const intervalTime = 16; // ~60fps
+            const steps = duration / intervalTime;
+            let step = 0;
+
+            const growInterval = setInterval(() => {
+                step++;
+                radius = (step / steps) * maxRadius;
+                const opacity = 1 - (step / steps);
+
+                circle.style.width = `${radius * 2}px`;
+                circle.style.height = `${radius * 2}px`;
+                circle.style.marginLeft = `-${radius}px`;
+                circle.style.marginTop = `-${radius}px`;
+                circle.style.opacity = opacity;
+
+                if (step >= steps) {
+                    clearInterval(growInterval);
+                    document.body.removeChild(circle);
+                }
+            }, intervalTime);
+        });
+    </script>
+</body>
+</html>
