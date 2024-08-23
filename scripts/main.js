@@ -55,22 +55,30 @@ function initNavigation() {
         });
     }
 
-    // Projects dropdown functionality
-    if (projectsDropdown) {
-        projectsDropdown.addEventListener('click', (e) => {
-            if (isMobile()) {
-                e.preventDefault();
-                toggleDropdown(projectsDropdown);
-            }
-        });
+// Projects dropdown functionality
+if (projectsDropdown) {
+    const dropdownToggle = projectsDropdown.querySelector('a');
+    const dropdownContent = projectsDropdown.querySelector('.dropdown-content');
+    
+    dropdownToggle.addEventListener('click', (e) => {
+        if (isMobile()) {
+            e.preventDefault();
+            toggleDropdown(projectsDropdown);
+        }
+    });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (isMobile() && !projectsDropdown.contains(e.target) && projectsDropdown.classList.contains('active')) {
-                toggleDropdown(projectsDropdown);
+    // Enable clicking on dropdown items in mobile view
+    dropdownContent.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (isMobile()) {
+                e.stopPropagation(); // Prevent the dropdown from toggling
+                nav.classList.remove('nav-active');
+                burger.classList.remove('toggle');
+                projectsDropdown.classList.remove('active');
             }
         });
-    }
+    });
+}
 
     // Handle window resize
     window.addEventListener('resize', () => {
@@ -107,6 +115,7 @@ function toggleDropdown(dropdown) {
     
     if (dropdown.classList.contains('active')) {
         dropdownContent.style.display = 'block';
+        dropdownContent.style.maxHeight = dropdownContent.scrollHeight + 'px';
         setTimeout(() => {
             dropdownContent.style.opacity = '1';
             dropdownContent.style.transform = 'translateY(0)';
@@ -114,8 +123,21 @@ function toggleDropdown(dropdown) {
     } else {
         dropdownContent.style.opacity = '0';
         dropdownContent.style.transform = 'translateY(-10px)';
+        dropdownContent.style.maxHeight = '0';
         setTimeout(() => {
             dropdownContent.style.display = 'none';
         }, 300);
     }
+
+
+    window.addEventListener('resize', () => {
+        if (!isMobile()) {
+            if (nav) nav.classList.remove('nav-active');
+            if (burger) burger.classList.remove('toggle');
+            if (projectsDropdown) projectsDropdown.classList.remove('active');
+            navLinks.forEach(link => {
+                link.style.animation = '';
+            });
+        }
+    });
 }
