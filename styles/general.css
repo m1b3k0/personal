@@ -1,0 +1,107 @@
+:root {
+    --textColor: #fff;
+    --textColor2: #000000;
+    --backgroundColor: #000;
+    --backgroundColor2: #141414;
+    --accentColor: #000000;
+    --accentColorLightBlack: #5a5a5a;
+    --accentColor2: #950101;
+    --secondaryColor: #c2c2c2;
+    --thirdColor: #9c9c9c;
+    --navHeight: 6rem;
+    --navMainItemColor: #023289;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+html {
+    font-size: 0.9rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f7f5;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--accentColor);
+    color: var(--backgroundColor);
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+
+
+footer {
+    margin-top: auto;
+
+    background-color: rgba(0, 0, 0, 0.8);
+    color: var(--textColor);
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+   /* Scrollbar styles */
+   ::-webkit-scrollbar {
+    width: 12px;
+    background-color: #f4f4f4;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #434343;
+    border-radius: 10px;
+    border: 3px solid #f4f4f4;
+    transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #1E1E1E;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #434343 #f4f4f4;
+}

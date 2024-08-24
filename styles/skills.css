@@ -1,0 +1,28 @@
+.skill-bars {
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.skill-bar {
+    margin-bottom: 0.8rem;
+}
+
+.skill-bar h4 {
+    font-size: 0.8rem;
+    color: var(--thirdColor);
+    margin-bottom: 0.5rem;
+}
+
+.skill-progress {
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.skill-progress-inner {
+    height: 100%;
+    background-color: var(--accentColor2);
+    width: 0;
+    transition: width 1s ease-out;
+}
