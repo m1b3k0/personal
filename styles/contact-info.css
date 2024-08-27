@@ -1,0 +1,20 @@
+.info-container {
+    flex-basis: 50%;
+    padding-left: 2rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.info-icon {
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    color: #c54040;
+}
+
+.info-text {
+    font-size: 1rem;
+}
